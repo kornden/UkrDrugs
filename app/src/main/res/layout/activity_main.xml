@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kornden.ukrdrugs.MainActivity">
+
+    <TextView
+        android:id="@+id/national_list_link"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="National List"
+        android:textSize="32dp"
+        android:gravity="center"
+        android:background="#212121"
+        android:textColor="#FFF"
+        android:layout_margin="10dp"/>
+    <TextView
+        android:id="@+id/affordable_drugs_link"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Affordable drugs"
+        android:textSize="32dp"
+        android:gravity="center"
+        android:background="#212121"
+        android:textColor="#FFF"
+        android:layout_margin="10dp"/>
+
+</LinearLayout>
