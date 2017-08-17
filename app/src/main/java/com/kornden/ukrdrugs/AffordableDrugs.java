@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Affordable Drugs (in ukrainian "Доступні ліки"), Ukrainian goverment program to make drugs for
  * Cardiac diseases, bronchial asthma and Diabetes mellitus type 2  cheaper or, in some cases - free.
  * The goal of this code - to find and display INN of drugs.
- *
+ * <p>
  * TODO: need to import Apache POI and create Drug objects from excel files.
  */
 
@@ -55,23 +55,16 @@ public class AffordableDrugs extends AppCompatActivity {
 
             }
 
-            /**
-             * When you start type - this method compares name field in Drug object in drugs list to
-             * the text, which was typed in EditText view, and if it matches, it puts Drug object
-             * into displayDrug list. When seeking is done displayDrug List is puts on drug_search
-             * layout in ListView via DrugArrayAdapter.
-             * @param charSequence
-             * @param i
-             * @param i1
-             * @param i2
-             */
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 ArrayList<Drug> displayDrugs = new ArrayList<Drug>();
+                //check if EditText view has anything typed in, and if hasn`t - clear displayDrugs
                 if (charSequence == "") {
                     displayDrugs.clear();
                 } else if (charSequence != "") {
                     for (Drug drug : drugs) {
+                        //compare input of EditText view to begining of Drug's name and if it`s true -
+                        // add this Drug object to displayDrugs List
                         if (drug.getName().toLowerCase().startsWith(
                                 charSequence.toString().toLowerCase()) && (charSequence != "")) {
                             displayDrugs.add(drug);

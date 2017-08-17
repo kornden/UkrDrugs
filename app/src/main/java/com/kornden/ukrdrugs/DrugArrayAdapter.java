@@ -16,12 +16,23 @@ import java.util.List;
  */
 
 public class DrugArrayAdapter extends ArrayAdapter<Drug> {
+    /** resource ID for layout is set to 0, because we'll define our own layout in getView method
+     *
+     * @param context use YOUR_ACTIVITY.this
+     * @param objects Must be List of Drug Objects
+     */
     public DrugArrayAdapter(@NonNull Context context, @NonNull List<Drug> objects) {
         super(context, 0, objects);
     }
 
     @NonNull
     @Override
+    /**
+     *
+     * @param position - this is current position of your layout;
+     * @param convertView - this is View, where your single Drug object will be displayed;
+     * @param parent - parent of your converView;
+     */
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItemView = convertView;
         if(listItemView == null) {
