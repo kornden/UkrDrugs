@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">UkrDrugs</string>
+    <string name="latin_name">Latin: </string>
+    <string name="affordable_list">Affordable List</string>
+    <string name="national_list">National List</string>
 </resources>
