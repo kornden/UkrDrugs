@@ -1,30 +1,33 @@
 package com.kornden.ukrdrugs;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 /**
- * Affordable Drugs (in ukrainian "Доступні ліки"), Ukrainian goverment program to make drugs for
- * Cardiac diseases, bronchial asthma and Diabetes mellitus type 2  cheaper or, in some cases - free.
- * The goal of this code - to find and display INN of drugs.
- * <p>
- * TODO: need to import Apache POI and create Drug objects from excel files.
+ * Created by kornd on 20-Aug-17.
  */
 
+public class AffordableDrugsFragment extends Fragment {
+    public AffordableDrugsFragment() {
+        super();
+    }
 
-public class AffordableDrugs extends AppCompatActivity {
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.drug_search);
-        EditText searchText = (EditText) findViewById(R.id.search_text);
+
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+       final View rootView =  inflater.inflate(R.layout.drug_search, container,false);
+        EditText searchText = (EditText) rootView.findViewById(R.id.search_text);
         final ArrayList<Drug> drugs = new ArrayList<>();
         drugs.add(new Drug("Аміодарон", "Amiodarone", "200mg"));
         drugs.add(new Drug("Амлодипін", "Amlodipine", "5mg, 10mg"));
@@ -57,22 +60,20 @@ public class AffordableDrugs extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ArrayList<Drug> displayDrugs = new ArrayList<Drug>();
-                //check if EditText view has anything typed in, and if hasn`t - clear displayDrugs
-                if (charSequence == "") {
+                ArrayList<Drug> displayDrugs = new ArrayList<Drug>(drugs);
+                if (charSequence != "") {
                     displayDrugs.clear();
-                } else if (charSequence != "") {
                     for (Drug drug : drugs) {
                         //compare input of EditText view to begining of Drug's name and if it`s true -
                         // add this Drug object to displayDrugs List
                         if (drug.getName().toLowerCase().startsWith(
-                                charSequence.toString().toLowerCase()) && (charSequence != "")) {
+                                charSequence.toString().toLowerCase())) {
                             displayDrugs.add(drug);
                         }
                     }
                 }
-                ListView listView = (ListView) findViewById(R.id.search_result);
-                DrugArrayAdapter drugAdapt = new DrugArrayAdapter(AffordableDrugs.this, displayDrugs);
+                ListView listView = (ListView) rootView.findViewById(R.id.search_result);
+                DrugArrayAdapter drugAdapt = new DrugArrayAdapter(getActivity(), displayDrugs);
                 listView.setAdapter(drugAdapt);
             }
 
@@ -81,6 +82,7 @@ public class AffordableDrugs extends AppCompatActivity {
 
             }
         });
-
+        return rootView;
     }
+
 }

@@ -16,12 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AffordableDrugs"
-            android:label="@string/affordable_list"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".NationalList"
-            android:label="@string/national_list"
-            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>
