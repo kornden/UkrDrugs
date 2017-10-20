@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.kornden.ukrdrugs"
+            android:name="com.kornden.ukrdrugs.data.DrugsContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

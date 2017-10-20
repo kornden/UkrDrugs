@@ -23,15 +23,17 @@ public class DrugContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_INN = "inn";
         public static final String COLUMN_FORM = "form";
-        public static final String COLUMN_RECIPE = "conditions";
+        public static final String COLUMN_RECIPE = "isrecipe-needed";
         public static final String COLUMN_COMPOSITION = "composition";
         public static final String COLUMN_GROUP = "group";
         public static final String COLUMN_ATC = "atc";
         public static final String COLUMN_MANUFACTURER = "manufacturer";
         public static final String COLUMN_COUNTRY = "country";
+        public static final String COLUMN_REGISTRATION_NUMBER = "registration_number";
+        public static final String COLUMN_START_REGISTRATION = "start_registration";
         public static final String COLUMN_END_REGISTRATION = "end_registration";
-        public static final String COLUMN_IS_HERBAL = "is-herbal";
-        public static final String COLUMN_IS_HOMEPATHIC = "is-homeopathic";
+        public static final String COLUMN_IS_HERBAL = "isherbal";
+        public static final String COLUMN_IS_HOMEPATHIC = "ishomeopathic";
         public static final String COLUMN_URL_MANUAL = "url-manual";
 
     }
