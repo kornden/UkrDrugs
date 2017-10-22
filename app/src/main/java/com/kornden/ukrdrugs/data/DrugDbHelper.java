@@ -22,21 +22,47 @@ public class DrugDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String CREATE_TABLE = "CREATE TABLE " + DrugContract.DrugEntry.TABLE_NAME + " (" +
                 DrugContract.DrugEntry._ID + " TEXT PRIMARY KEY, " +
-                DrugContract.DrugEntry.COLUMN_NAME + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_INN + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_FORM + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_RECIPE + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_COMPOSITION + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_GROUP + " TEXT DEFAULT NULL, "+
-                DrugContract.DrugEntry.COLUMN_ATC + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_MANUFACTURER + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_COUNTRY + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_REGISTRATION_NUMBER + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_START_REGISTRATION + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_END_REGISTRATION + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_IS_HERBAL + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_IS_HOMEPATHIC + " TEXT DEFAULT NULL, " +
-                DrugContract.DrugEntry.COLUMN_URL_MANUAL + " TEXT DEFAULT NULL);";
+                DrugContract.DrugEntry.COLUMN_NAME + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_INN + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_FORM + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_ISRECIPE + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_CONSISTOF + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_FARM_GROUP + " TEXT , "+
+                DrugContract.DrugEntry.COLUMN_ATC1 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_ATC2 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_ATC3 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_SELLER_UKR + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_SELLER_COUNTRY + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_SELLER_ADDRESS + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_COUNT + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_UKR1 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_COUNTRY1 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_ADDRESS1 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_UKR2 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_COUNTRY2 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_ADDRESS2 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_UKR3 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_COUNTRY3 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_ADDRESS3 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_UKR4 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_COUNTRY4 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_ADDRESS4 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_UKR5 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_COUNTRY5 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_MANUFACTURER_ADDRESS5 + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_REGISTRATION_NUMBER + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_START_DATE + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_END_DATE + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_TYPE + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_BIO + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_HERBAL + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_ORPHAN + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_HOMEO + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_INN_TYPE + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_STOP + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_STOP_LASTDAY + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_STOP_REASON + " TEXT , " +
+                DrugContract.DrugEntry.COLUMN_URL_MANUAL + " TEXT);";
 
         sqLiteDatabase.execSQL(CREATE_TABLE);
 

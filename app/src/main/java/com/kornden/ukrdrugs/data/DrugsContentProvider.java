@@ -20,19 +20,22 @@ public class DrugsContentProvider extends ContentProvider {
 
     public static final int DRUGS = 100;
 
+    public static final int DRUG_WITH_ID = 101;
+
     private static UriMatcher sUriMatcher = buildUriMatcher();
 
     public static UriMatcher buildUriMatcher(){
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(DrugContract.AUTHORITY,DrugContract.PATH_DRUGS,DRUGS);
+        uriMatcher.addURI(DrugContract.AUTHORITY,DrugContract.PATH_DRUGS +"/*",DRUG_WITH_ID);
         return uriMatcher;
     }
 
-    private DrugDbHelper mDrugDbHelper;
+    private DrugAssetDbHepler mDrugDbHelper;
 
     @Override
     public boolean onCreate() {
-        mDrugDbHelper = new DrugDbHelper(getContext());
+        mDrugDbHelper = new DrugAssetDbHepler(getContext());
         return true;
     }
 
@@ -54,6 +57,19 @@ public class DrugsContentProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+            case DRUG_WITH_ID:
+                String qID = uri.getLastPathSegment().trim();
+                selection = DrugContract.DrugEntry._ID + " = " + "\'" + qID + "\' ";
+                cursor = db.query(DrugContract.DrugEntry.TABLE_NAME,
+                        columns,
+                        selection,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+                break;
+
             default: throw new UnsupportedOperationException("unknown Uri " + uri);
 
         }
