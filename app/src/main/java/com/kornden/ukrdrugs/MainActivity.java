@@ -8,14 +8,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kornden.ukrdrugs.data.DrugContract;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+
 /**TODO Дмитренко, [22.10.17 13:02]
  #хотелкі:
  -Activity обране (там знаходяться раніше відмічені препарати, там є індикатор що препарати в обраному і він збережений на тел)
@@ -32,43 +39,80 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements
 DrugAdapter.DrugItemClickListener{
 
-    EditText editTextDrugSearch;
+
 
     ProgressBar progressBar;
     // listOfDrugData ArrayList consist of String[] which have on [0] - _id column(it`s a TEXT),
     // [1] - drug name, [2] - drug INN, [3] - drug dosage
     ArrayList<String[]> listOfDrugData;
-    RecyclerView drugList;
+    RecyclerView recyclerDrugList;
     DrugAdapter drugAdapter;
+    AutoCompleteTextView editTextDrugSearch;
+    HashSet<String> autocompleteSet;
+    ArrayList<String> autocompleteList;
+    TextView viewInsteadRecycler;
+    Button findButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        viewInsteadRecycler = (TextView) findViewById(R.id.text_instead_recycler);
+        viewInsteadRecycler.setText("Введіть назву препарату українською або англійськими літерами");
+        viewInsteadRecycler.setTextSize(15);
 
-        drugList = (RecyclerView) findViewById(R.id.recycler_drug_list);
-
-        drugList.setLayoutManager(new LinearLayoutManager(this));
-
-        drugList.setHasFixedSize(true);
-
-
-
-
-        editTextDrugSearch = (EditText) findViewById(R.id.edit_drug_search);
-
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-
-
+        findButton = (Button) findViewById(R.id.find_button);
+        findButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                find();
+            }
+        });
 
         listOfDrugData = new ArrayList<>();
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        recyclerDrugList = (RecyclerView) findViewById(R.id.recycler_drug_list);
+
+        recyclerDrugList.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerDrugList.setHasFixedSize(true);
+        String[] all = {DrugContract.DrugEntry.COLUMN_NAME, null};
+        new LoadCursor().execute(all);
+
+        recyclerDrugList.setVisibility(View.INVISIBLE);
 
 
 
     }
-    public void find(View view){
+    public void getAutocompleteList(){
+
+
+        autocompleteSet = new HashSet<>();
+        for (String[] listname : listOfDrugData){
+            autocompleteSet.add(listname[1]);
+            autocompleteSet.add(listname[2]);
+        }
+        autocompleteList = new ArrayList<>(autocompleteSet);
+        Collections.sort(autocompleteList);
+        editTextDrugSearch = (AutoCompleteTextView) findViewById(R.id.edit_drug_search);
+
+        editTextDrugSearch.setThreshold(1);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,
+                autocompleteList);
+        editTextDrugSearch.setAdapter(arrayAdapter);
+        editTextDrugSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)){
+                    find();
+                }
+                return true;
+            }
+        });
+    }
+    public void find(){
 
 
         String[] searchArgs = {editTextDrugSearch.getText().toString().toUpperCase().trim()};
@@ -94,22 +138,32 @@ DrugAdapter.DrugItemClickListener{
     private class LoadCursor extends AsyncTask<String,Void,Cursor>{
     @Override
     protected Cursor doInBackground(String... strings) {
+
+        Cursor cursor;
         String[] columns = {DrugContract.DrugEntry._ID, DrugContract.DrugEntry.COLUMN_NAME,
                 DrugContract.DrugEntry.COLUMN_INN, DrugContract.DrugEntry.COLUMN_CONSISTOF};
-        String selection = DrugContract.DrugEntry.COLUMN_NAME + " LIKE \'" + strings[0] + "%'";
-        Cursor cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
-                columns,
-                selection,
-                null,
-                DrugContract.DrugEntry.COLUMN_INN);
-        if(cursor != null)
-        if(cursor.getCount() == 0){
-            selection = DrugContract.DrugEntry.COLUMN_INN + " LIKE \'" + strings[0] + "%'";
+        if(strings.length == 1) {
+            String selection = DrugContract.DrugEntry.COLUMN_NAME + " LIKE \'" + strings[0] + "%'";
             cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
                     columns,
                     selection,
                     null,
                     DrugContract.DrugEntry.COLUMN_INN);
+            if (cursor != null)
+                if (cursor.getCount() == 0) {
+                    selection = DrugContract.DrugEntry.COLUMN_INN + " LIKE \'" + strings[0] + "%'";
+                    cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
+                            columns,
+                            selection,
+                            null,
+                            DrugContract.DrugEntry.COLUMN_INN);
+                }
+        }else{
+            cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
+                    columns,
+                    null,
+                    null,
+                    null);
         }
 
 
@@ -118,8 +172,8 @@ DrugAdapter.DrugItemClickListener{
 
     @Override
     protected void onPostExecute(Cursor cursor) {
-        listOfDrugData.clear();
-        drugList.setVisibility(View.VISIBLE);
+listOfDrugData = new ArrayList<>();
+        recyclerDrugList.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         if (cursor.getCount() != 0){
             while (cursor.moveToNext()){
@@ -132,15 +186,21 @@ DrugAdapter.DrugItemClickListener{
             }
             drugAdapter = new DrugAdapter(listOfDrugData, MainActivity.this);
 
-            drugList.setAdapter(drugAdapter);
-        }else Toast.makeText(getBaseContext(),"No matches", Toast.LENGTH_LONG).show();
+            recyclerDrugList.setAdapter(drugAdapter);
+        }else{
+            recyclerDrugList.setVisibility(View.INVISIBLE);
+            Toast.makeText(getBaseContext(),"No matches", Toast.LENGTH_LONG).show();
+        }
         cursor.close();
+        if(autocompleteList == null) {
+            getAutocompleteList();
+        }
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        drugList.setVisibility(View.INVISIBLE);
+        recyclerDrugList.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
 }
