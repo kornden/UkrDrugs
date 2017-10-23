@@ -9,13 +9,10 @@
     tools:context="com.kornden.ukrdrugs.MainActivity">
     <AutoCompleteTextView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/edit_drug_search"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="FIND"
-       android:id="@+id/find_button"/>
+        android:layout_height="60dp"
+        android:id="@+id/edit_drug_search"
+        android:textSize="24sp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

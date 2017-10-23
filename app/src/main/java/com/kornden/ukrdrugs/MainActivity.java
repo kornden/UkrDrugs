@@ -1,5 +1,6 @@
 package com.kornden.ukrdrugs;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,9 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,43 +44,40 @@ DrugAdapter.DrugItemClickListener{
 
 
     ProgressBar progressBar;
+
     // listOfDrugData ArrayList consist of String[] which have on [0] - _id column(it`s a TEXT),
     // [1] - drug name, [2] - drug INN, [3] - drug dosage
     ArrayList<String[]> listOfDrugData;
+
     RecyclerView recyclerDrugList;
+
     DrugAdapter drugAdapter;
+
     AutoCompleteTextView editTextDrugSearch;
+
     HashSet<String> autocompleteSet;
+
     ArrayList<String> autocompleteList;
-    TextView viewInsteadRecycler;
-    Button findButton;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewInsteadRecycler = (TextView) findViewById(R.id.text_instead_recycler);
-        viewInsteadRecycler.setText("Введіть назву препарату українською або англійськими літерами");
-        viewInsteadRecycler.setTextSize(15);
 
-        findButton = (Button) findViewById(R.id.find_button);
-        findButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                find();
-            }
-        });
 
         listOfDrugData = new ArrayList<>();
+
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         recyclerDrugList = (RecyclerView) findViewById(R.id.recycler_drug_list);
-
         recyclerDrugList.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerDrugList.setHasFixedSize(true);
+
         String[] all = {DrugContract.DrugEntry.COLUMN_NAME, null};
+
         new LoadCursor().execute(all);
 
         recyclerDrugList.setVisibility(View.INVISIBLE);
@@ -111,6 +110,18 @@ DrugAdapter.DrugItemClickListener{
                 return true;
             }
         });
+        editTextDrugSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                find();
+                View view1 = MainActivity.this.getCurrentFocus();
+                if (view1 != null) {
+                    InputMethodManager imm = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                }
+            }
+        });
     }
     public void find(){
 
@@ -135,30 +146,32 @@ DrugAdapter.DrugItemClickListener{
 
     }
 
+    /** LoadCursor is class for quering DrugRegister.db via ContentResolver*/
     private class LoadCursor extends AsyncTask<String,Void,Cursor>{
     @Override
     protected Cursor doInBackground(String... strings) {
-
         Cursor cursor;
         String[] columns = {DrugContract.DrugEntry._ID, DrugContract.DrugEntry.COLUMN_NAME,
                 DrugContract.DrugEntry.COLUMN_INN, DrugContract.DrugEntry.COLUMN_CONSISTOF};
-        if(strings.length == 1) {
+        switch (strings.length){
+            case  1:
             String selection = DrugContract.DrugEntry.COLUMN_NAME + " LIKE \'" + strings[0] + "%'";
             cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
                     columns,
                     selection,
                     null,
                     DrugContract.DrugEntry.COLUMN_INN);
-            if (cursor != null)
-                if (cursor.getCount() == 0) {
+
+                    if (cursor.getCount() == 0) {
                     selection = DrugContract.DrugEntry.COLUMN_INN + " LIKE \'" + strings[0] + "%'";
                     cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
                             columns,
                             selection,
                             null,
                             DrugContract.DrugEntry.COLUMN_INN);
-                }
-        }else{
+                    }
+                    break;
+            default:
             cursor = getContentResolver().query(DrugContract.DrugEntry.CONTENT_URI,
                     columns,
                     null,
