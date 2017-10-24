@@ -127,6 +127,10 @@ DrugAdapter.DrugItemClickListener{
 
 
         String[] searchArgs = {editTextDrugSearch.getText().toString().toUpperCase().trim()};
+        if (searchArgs[0].contains("\'")){
+            searchArgs[0] = new StringBuilder(searchArgs[0])
+                    .insert(searchArgs[0].indexOf("\'"), "\'").toString();
+        }
 
 
             new LoadCursor().execute(searchArgs);
