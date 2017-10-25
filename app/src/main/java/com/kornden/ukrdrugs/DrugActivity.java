@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.kornden.ukrdrugs.data.DrugContract;
 
+/** This activity will show information about drug, when you click on RecyclerView.ViewHolder on
+ * MainActivity
+ */
 public class DrugActivity extends AppCompatActivity {
     TextView drugName;
     TextView drugINN;

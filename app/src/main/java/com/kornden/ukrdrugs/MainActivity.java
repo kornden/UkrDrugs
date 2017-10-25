@@ -9,14 +9,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kornden.ukrdrugs.data.DrugContract;
@@ -87,29 +85,28 @@ DrugAdapter.DrugItemClickListener{
     }
     public void getAutocompleteList(){
 
-
+        //  HashSet holds only one copy of value, so it will filter all duplicates
         autocompleteSet = new HashSet<>();
         for (String[] listname : listOfDrugData){
+            //listname[1] - drug name
             autocompleteSet.add(listname[1]);
+            //listname[2] - drug INN
             autocompleteSet.add(listname[2]);
         }
+        //autocompleteList is used for filling AutoCompleteTextView with data
         autocompleteList = new ArrayList<>(autocompleteSet);
+        // Drug names must be sorted in AutoCompleteTextView
         Collections.sort(autocompleteList);
+
         editTextDrugSearch = (AutoCompleteTextView) findViewById(R.id.edit_drug_search);
 
         editTextDrugSearch.setThreshold(1);
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,
                 autocompleteList);
+
         editTextDrugSearch.setAdapter(arrayAdapter);
-        editTextDrugSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if(keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)){
-                    find();
-                }
-                return true;
-            }
-        });
+
         editTextDrugSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -123,8 +120,8 @@ DrugAdapter.DrugItemClickListener{
             }
         });
     }
-    public void find(){
 
+    public void find(){
 
         String[] searchArgs = {editTextDrugSearch.getText().toString().toUpperCase().trim()};
         if (searchArgs[0].contains("\'")){
